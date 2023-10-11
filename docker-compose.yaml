@@ -1,0 +1,29 @@
+################################################################
+#
+#   Development:
+#   nodemon.cmd --ext '*' --exec docker-compose up --build pdf-web-toolkit
+#
+#   docker build -t pdf-web-toolkit .
+#   docker run -p 8001:8000 -i -t pdf-web-toolkit
+################################################################
+
+version: "3"
+
+# networks:
+#   pdf-web-toolkit-network:
+
+services:
+  pdf-web-toolkit:
+    build: ./
+    container_name: pdf-web-toolkit
+    restart: always
+#    networks:
+#      - pdf-web-toolkit-network
+    command: >
+      sh -c "
+        ./init.sh
+        "
+    ports:
+      - 8001:8000
+
+
