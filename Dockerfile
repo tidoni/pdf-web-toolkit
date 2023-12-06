@@ -5,6 +5,7 @@ FROM python:3.11-slim
 WORKDIR /app
 RUN mkdir /app/uploads
 RUN mkdir /app/split
+RUN mkdir /app/merge
 RUN apt-get update
 
 # install dependencies

@@ -3,43 +3,17 @@
 <head>
     <title>PDF Splitter</title>
     <link rel="shortcut icon" href="/static/icons/filetype-pdf.svg" type="image/x-icon">
+    <script src="/static/js/api_handler.js"></script> 
 </head>
 <body>
     <h1>PDF Splitter</h1>
-    <input type="file" id="pdfFile" accept=".pdf"><br>
-    <button onclick="uploadPDF()">Split PDF into individual pages</button>
+    <input type="file" id="split_pdfFile" accept=".pdf"><br>
+    <button onclick="uploadPDF_split()">Split PDF into individual pages</button>
+
+    <h1>PDF Merger</h1>
+    <input type="file" id="merge_pdfFile_1" accept=".pdf"><br>
+    <input type="file" id="merge_pdfFile_2" accept=".pdf"><br>
+    <button onclick="uploadPDF_merge()">Merge the two selected PDFs</button>
     <div id="output"></div>
-
-    <script>
-        function downloadURI(uri, name) {
-            var link = document.createElement("a");
-            link.download = name;
-            link.href = uri;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            delete link;
-        }
-
-        function uploadPDF() {
-            const fileInput = document.getElementById('pdfFile');
-            const file = fileInput.files[0];
-            const formData = new FormData();
-            formData.append('pdf', file);
-
-            const backendURL = '/split';
-
-            fetch(backendURL, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.debug("data from Backend: ", data)
-                downloadURI(data["url"], data["name"]);
-            })
-            .catch(error => console.error(error));
-        }
-    </script>
 </body>
 </html>
