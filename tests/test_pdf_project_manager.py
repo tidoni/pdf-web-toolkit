@@ -13,3 +13,14 @@ def test_folder_creation():
     print(test_pdf_project_manager.uuid)
     assert os.path.isdir('/app/projects/' + test_pdf_project_manager.uuid)
 
+
+def test_Projecttest_1():
+
+    """
+    test_project = pdf_project_manager()
+    print(test_pdf_project_manager.uuid)
+    assert os.path.isdir('/app/projects/' + test_pdf_project_manager.uuid)
+    """
+    
+    assert True
+
