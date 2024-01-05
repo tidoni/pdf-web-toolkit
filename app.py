@@ -14,7 +14,7 @@ logging.basicConfig(
     # level=logging.ERROR,
     # level=logging.INFO,
     level=logging.DEBUG,
-    format="Start: " + str(dt.datetime.now()).replace(" ", "_") + " | %(asctime)s [%(levelname)s] %(message)s",
+    format=str(dt.datetime.now()).replace(" ", "_") + " | %(asctime)s [%(levelname)s] %(message)s",
     handlers=[
         logging.FileHandler("/var/log/" + str(dt.datetime.today().strftime('%Y-%m-%d')) + "_-_cron.log"),
         logging.StreamHandler(sys.stdout)
