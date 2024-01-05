@@ -6,6 +6,7 @@ WORKDIR /app
 RUN mkdir /app/uploads
 RUN mkdir /app/split
 RUN mkdir /app/merge
+RUN mkdir /app/projects
 RUN apt-get update
 
 # install dependencies
