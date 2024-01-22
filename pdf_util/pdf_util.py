@@ -24,22 +24,24 @@ class pdf_util:
         self.file_name = os.path.basename(file_path)
         self.file_name_wo_extension = os.path.splitext(os.path.basename(file_path))[0]
 
-
-    def split_pdf_with_location(self, output_filepath, no_names=False):
+    def split_pdf_with_location(self, output_filepath, no_names=False, int_padding=False):
         out_filenames = []
         os.makedirs(os.path.dirname(output_filepath), exist_ok=True)
         with open(self.file_path, 'rb') as pdf_file:
             pdf_reader = PdfReader(pdf_file)
             num_pages = len(pdf_reader.pages)
             for page_num in range(num_pages):
-
                 writer = PdfWriter()
                 writer.add_page(pdf_reader.pages[page_num])
 
+                str_page_num = str(page_num + 1)
+                if int_padding:
+                    str_page_num = str_page_num.zfill(4)
+
                 if no_names:
-                    out_filename = os.path.dirname(output_filepath) + '/' + str(page_num + 1) + '.pdf'
+                    out_filename = os.path.dirname(output_filepath) + '/' + str_page_num + '.pdf'
                 else:
-                    out_filename = os.path.dirname(output_filepath) + '/' + self.file_name_wo_extension + '_' + str(page_num + 1) + '.pdf'
+                    out_filename = os.path.dirname(output_filepath) + '/' + self.file_name_wo_extension + '_' + str_page_num + '.pdf'
 
                 with open(out_filename, 'wb') as outfile:
                     writer.write(outfile)
@@ -48,10 +50,9 @@ class pdf_util:
         return out_filenames
 
     # Deprecate when pdf_project_manager takes effect
-    def split_pdf(self):
+    def split_pdf(self, int_padding=False):
         os.makedirs(os.path.dirname(self.file_path) + "/split_pdf", exist_ok=True)
-        return self.split_pdf_with_location(os.path.dirname(self.file_path) + "/split_pdf/", False)
-
+        return self.split_pdf_with_location(os.path.dirname(self.file_path) + "/split_pdf/", False, int_padding)
 
     def merge_pdf_with_and_location(self, merge_file_path, output_filepath):
         os.makedirs(os.path.dirname(output_filepath), exist_ok=True)
@@ -74,5 +75,3 @@ class pdf_util:
     def merge_pdf_with(self, merge_file_path, merged_name="merged"):
         os.makedirs(os.path.dirname(self.file_path) + "/merge_pdf", exist_ok=True)
         return self.merge_pdf_with_and_location(merge_file_path, os.path.dirname(self.file_path) + "/merge_pdf" + '/merger.pdf')
-        
-
