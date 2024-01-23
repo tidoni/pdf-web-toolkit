@@ -1,11 +1,12 @@
-
 FROM python:3.11-slim
+# FROM python:3.11.3
 
 # set the working directory
 WORKDIR /app
 RUN mkdir /app/uploads
 RUN mkdir /app/split
 RUN mkdir /app/merge
+RUN mkdir /app/projects
 RUN apt-get update
 
 # install dependencies

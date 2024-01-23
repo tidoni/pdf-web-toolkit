@@ -24,6 +24,6 @@ services:
         ./init.sh
         "
     ports:
-      - 8001:8000
+      - 8002:8000
 
 

@@ -1,19 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>PDF Web Toolkit</title>
-    <link rel="shortcut icon" href="/static/icons/filetype-pdf.svg" type="image/x-icon">
-    <script src="/static/js/api_handler.js"></script> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Tools</title>
 </head>
 <body>
-    <h1>PDF Splitter</h1>
-    <input type="file" id="split_pdfFile" accept=".pdf"><br>
-    <button onclick="uploadPDF_split()">Split PDF into individual pages</button>
 
-    <h1>PDF Merger</h1>
-    <input type="file" id="merge_pdfFile_1" accept=".pdf"><br>
-    <input type="file" id="merge_pdfFile_2" accept=".pdf"><br>
-    <button onclick="uploadPDF_merge()">Merge the two selected PDFs</button>
-    <div id="output"></div>
+<div id="app">
+  <h1>PDF Splitter</h1>
+  <input type="file" @change="handleFileSelect($event, 'split_pdfFile')" accept=".pdf"><br>
+  <button @click="uploadPDF('split_pdfFile')">Split PDF into individual pages</button>
+
+  <h1>PDF Merger</h1>
+  <input type="file" @change="handleFileSelect($event, 'merge_pdfFile_1')" accept=".pdf"><br>
+  <input type="file" @change="handleFileSelect($event, 'merge_pdfFile_2')" accept=".pdf"><br>
+  <button @click="uploadPDF('merge_pdfFile_1', 'merge_pdfFile_2')">Merge the two selected PDFs</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    split_pdfFile: null,
+    merge_pdfFile_1: null,
+    merge_pdfFile_2: null
+  },
+  methods: {
+    handleFileSelect(event, inputId) {
+      const fileInput = event.target;
+      this[inputId] = fileInput.files[0];
+      console.debug("fileInput", fileInput);
+      console.debug("this[inputId]", this[inputId]);
+    },
+    uploadPDF(fileInputId1, fileInputId2) {
+      const file1 = this[fileInputId1];
+      const file2 = fileInputId2 ? this[fileInputId2] : null;
+
+      console.debug("file1", file1)
+      console.debug("file2", file2)
+
+      const formData = new FormData();
+      formData.append('pdf_1', file1);
+
+      if (file2) {
+        formData.append('pdf_2', file2);
+      }
+
+      console.debug("formData", formData)
+
+      const backendURL = file2 ? '/merge_to_pdf' : '/split_to_zip';
+
+      fetch(backendURL, {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.debug("data from Backend: ", data);
+          this.downloadURI(data["url"], data["name"]);
+      })
+      .catch(error => console.error(error));
+    },
+    downloadURI(uri, name) {
+      const link = document.createElement("a");
+      link.download = name;
+      link.href = uri;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      delete link;
+    }
+  }
+});
+</script>
+
 </body>
 </html>
