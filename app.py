@@ -1,9 +1,7 @@
 import shutil
 import os
 from flask import Flask, render_template, request, redirect, jsonify, send_from_directory
-from pathlib import Path
-from pdf_util.pdf_util import pdf_util
-# from pdf_util.pdf_project_manager import pdf_project_manager
+from pdf_util.pdf_project_manager import pdf_project_manager
 
 import datetime as dt
 import logging
@@ -57,19 +55,16 @@ def split_to_zip():
         filename = os.path.join(app.config['UPLOAD_FOLDER'], pdf_file.filename)
         pdf_file.save(filename)
 
-        # Use pdf_utils Module to split File
-        out_filenames = pdf_util(filename).split_pdf()
-        logging.debug(out_filenames)
+        # Use pdf_project_manager to split File
+        pdf_project = pdf_project_manager()
+        pdf_project.add_pdf(filename)
 
         logging.debug(in_filename)
         logging.debug(os.path.splitext(pdf_file.filename)[0])
 
-        shutil.make_archive(in_filename + '_splitted', 'zip', os.path.dirname(filename) + "/split_pdf")
+        shutil.make_archive(in_filename + '_splitted', 'zip', "/app/projects/" + pdf_project.uuid + '/splitted')
         zip_filename = in_filename + "_splitted.zip"
         os.rename("/app/" + zip_filename, "/app/split/" + zip_filename)
-
-        for temp_file in out_filenames:
-            Path.unlink(temp_file)
 
         response = jsonify({"url": "/split/" + zip_filename, "name": zip_filename})
         # response.headers.add("Access-Control-Allow-Origin", "*")
@@ -99,8 +94,11 @@ def merge_to_pdf():
         logging.debug(filename_1)
         logging.debug(filename_2)
 
-        # Use pdf_utils Module to split File
-        out_path = pdf_util(filename_1).merge_pdf_with(filename_2)
+        # Use pdf_project_manager to split File
+        pdf_project = pdf_project_manager()
+        pdf_project.add_pdf(filename_1)
+        pdf_project.add_pdf(filename_2)
+        out_path = "/app/projects/" + pdf_project.uuid + "/complete.pdf"
         logging.debug(out_path)
         os.rename(out_path, "/app/merge/merger.pdf")
 

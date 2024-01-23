@@ -16,26 +16,23 @@
   <input type="file" @change="handleFileSelect($event, 'merge_pdfFile_1')" accept=".pdf"><br>
   <input type="file" @change="handleFileSelect($event, 'merge_pdfFile_2')" accept=".pdf"><br>
   <button @click="uploadPDF('merge_pdfFile_1', 'merge_pdfFile_2')">Merge the two selected PDFs</button>
-  
-  <div id="output">{{ outputMessage }}</div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 <script>
 new Vue({
   el: '#app',
   data: {
     split_pdfFile: null,
     merge_pdfFile_1: null,
-    merge_pdfFile_2: null,
-    outputMessage: ''
+    merge_pdfFile_2: null
   },
   methods: {
     handleFileSelect(event, inputId) {
       const fileInput = event.target;
       this[inputId] = fileInput.files[0];
-      console.debug("fileInput", fileInput)
-      console.debug("this[inputId]", this[inputId])
+      console.debug("fileInput", fileInput);
+      console.debug("this[inputId]", this[inputId]);
     },
     uploadPDF(fileInputId1, fileInputId2) {
       const file1 = this[fileInputId1];
