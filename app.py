@@ -1,9 +1,9 @@
 import shutil
 import os
 from flask import Flask, render_template, request, redirect, jsonify, send_from_directory
-from pypdf import PdfReader, PdfWriter
 from pathlib import Path
 from pdf_util.pdf_util import pdf_util
+# from pdf_util.pdf_project_manager import pdf_project_manager
 
 import datetime as dt
 import logging
@@ -44,10 +44,10 @@ def send_merge(path):
 
 @app.route('/split_to_zip', methods=['POST'])
 def split_to_zip():
-    if 'pdf' not in request.files:
+    if 'pdf_1' not in request.files:
         return redirect(request.url)
 
-    pdf_file = request.files['pdf']
+    pdf_file = request.files['pdf_1']
 
     if pdf_file.filename == '':
         return redirect(request.url)
@@ -63,7 +63,7 @@ def split_to_zip():
 
         logging.debug(in_filename)
         logging.debug(os.path.splitext(pdf_file.filename)[0])
-        
+
         shutil.make_archive(in_filename + '_splitted', 'zip', os.path.dirname(filename) + "/split_pdf")
         zip_filename = in_filename + "_splitted.zip"
         os.rename("/app/" + zip_filename, "/app/split/" + zip_filename)
