@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/static/icons/filetype-pdf.svg" type="image/x-icon">
   <title>PDF Tools</title>
+  <meta http-equiv="Refresh" content="0; url='/app/'" />
 </head>
 <body>
 
@@ -53,13 +55,13 @@ new Vue({
       const backendURL = file2 ? '/merge_to_pdf' : '/split_to_zip';
 
       fetch(backendURL, {
-          method: 'POST',
-          body: formData
+        method: 'POST',
+        body: formData
       })
       .then(response => response.json())
       .then(data => {
-          console.debug("data from Backend: ", data);
-          this.downloadURI(data["url"], data["name"]);
+        console.debug("data from Backend: ", data);
+        this.downloadURI(data["url"], data["name"]);
       })
       .catch(error => console.error(error));
     },
