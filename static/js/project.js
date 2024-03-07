@@ -56,6 +56,7 @@ const vueInstance = new Vue({
       }
       console.debug('page_overview_margin_bottom: ', page_overview_margin_bottom);
       page_overview.style['margin-bottom'] = page_overview_margin_bottom;
+      document.getElementById('overview-wrapper').style['border-bottom'] = '1px solid #fff';
     },
     display_pages() {
       const div_overview = document.getElementById('page_overview');
