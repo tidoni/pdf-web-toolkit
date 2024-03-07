@@ -22,13 +22,28 @@ logging.basicConfig(
 )
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=os.path.abspath('/app/static'))
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('base.html', page='project', settings='set', error=False)
+
+
+@app.route('/splitt')
+def splitt():
+    return render_template('base.html', page='splitt', settings='set', error=False)
+
+
+@app.route('/merge')
+def merge():
+    return render_template('base.html', page='merge', settings='set', error=False)
+
+
+@app.route('/ocr')
+def ocr():
+    return render_template('base.html', page='ocr', settings='set', error=False)
 
 
 @app.route('/app/')
@@ -80,6 +95,23 @@ def get_single_pages_info(uuid):
         for file in page_list:
             pages.append(file[4:])  # Cut of /app
         response = jsonify({'status': 200, 'pages': pages})
+    except Exception as e:
+        logging.debug("There was an error: " + str(e))
+        logging.debug("Stacktrace: " + str(traceback.format_exc()))
+        response = jsonify({"status": 500, "error_message": e})
+    return response
+
+
+@app.route('/move_page/<uuid>/<from_page>/<to_page>')
+def move_page(uuid, from_page, to_page):
+    try:
+        pdf_project = pdf_project_manager(uuid4=uuid)
+        logging.debug("int(from_page): ")
+        logging.debug(int(from_page))
+        logging.debug("int(to_page): ")
+        logging.debug(int(to_page))
+        pdf_project.move_page(from_location=int(from_page), to_location=int(to_page))
+        response = jsonify({'status': 200, 'message': 'page moved successfully'})
     except Exception as e:
         logging.debug("There was an error: " + str(e))
         logging.debug("Stacktrace: " + str(traceback.format_exc()))

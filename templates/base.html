@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="de" data-bs-theme="light">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/filetype-pdf.svg') }}" type="image/x-icon">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base_styles.css') }}" rel="stylesheet">
+    <title>PDF-Web-Toolkit{% if page == 'project' %} | Project{% endif %}{% if page == 'splitt' %} | Splitt{% endif %}{% if page == 'merge' %} | Merge{% endif %}{% if page == 'ocr' %} | OCR{% endif %}</title>
+  </head>
+
+
+  <!--<body class="d-flex flex-column h-80">-->
+  <div class="col-lg-8 mx-auto py-md-5">
+
+    <header class="">
+      <nav class="navbar navbar-expand-lg border-bottom">
+        <div class="container">
+          <a class="navbar-brand" href="/" hidden>
+            <picture>
+              <source srcset="{{ url_for('static', filename='img/filetype-pdf.svg') }}" media="(prefers-color-scheme: dark)">
+              <img src="{{ url_for('static', filename='img/filetype-pdf.svg') }}" alt="PDF-Web-Toolkit" height="40">
+            </picture>
+          </a>
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          
+          <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav mr-auto flex-fill">
+              <li class="nav-item {%if page == 'project'%}active{%endif%}"><a class="nav-link" href="/">Project</a></li>
+              <li class="nav-item {%if page == 'splitt'%}active{%endif%}" hidden><a class="nav-link" href="/splitt">Simple Splitt</a></li>
+              <li class="nav-item {%if page == 'merge'%}active{%endif%}" hidden><a class="nav-link" href="/merge">Simple Merge</a></li>
+              <li class="nav-item {%if page == 'ocr'%}active{%endif%}" hidden><a class="nav-link" href="/ocr">Simple OCR</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="py-3">
+      <div class="container py-3">
+        {% if page == 'project' %}
+          {% include 'partials/project.html' %}
+        {% endif %}
+
+        {% if page == 'splitt' %}
+          {% include 'partials/splitt.html' %}
+        {% endif %}
+
+        {% if page == 'merge' %}
+          {% include 'partials/merge.html' %}
+        {% endif %}
+
+        {% if page == 'ocr' %}
+          {% include 'partials/ocr.html' %}
+        {% endif %}
+      </div>
+    </main>
+
+    <!-- https://getbootstrap.com/docs/5.3/examples/footers/# -->
+    <footer class="py-3 my-4 border-top">
+      <div class="container py-3">
+        <p class="text-center text-body-secondary text-muted">Developed with ♥ by <a href="https://github.com/tidoni/pdf-web-toolkit" target="_blank">Tidoni</a> (Niklas Müller)</p>
+      </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> -->
+  </body>
+
+</html>

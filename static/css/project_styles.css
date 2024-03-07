@@ -1,0 +1,47 @@
+/*
+    https://css-tricks.com/pure-css-horizontal-scrolling/
+*/
+.single_page_embed {
+    height: 90%;
+    width: 100%;
+    display: inline-block;
+    margin: 0 auto;
+}
+.single_page_div {
+    display: block;
+    padding: 1px;
+    transform: rotate(90deg) translateX(500px); /* translateY(-2px) */
+    transform-origin: right top;
+
+    height: 500px;
+    width: 500px;
+    text-align: center;
+}
+.pdf-interact-buttons {
+    padding-left: 1em;
+}
+
+#btn-group-download {
+    width: 100%;
+    margin-top: 1em;
+    display: none;
+}
+#btn_download_complete, #btn_download_singel_pages {
+    width: 50%;
+}
+#overview-wrapper {
+    width: 100%;
+}
+#page_overview {
+    display: block;
+    top: 0;
+    left: 0;
+    width: 500px;
+    margin: 0;
+    padding-top: 5px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transform: rotate(-90deg) translateY(-500px);
+    transform-origin: right top;
+    /* border: 0.1em solid darkcyan; */
+}
