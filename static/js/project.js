@@ -1,7 +1,10 @@
+/* eslint-disable new-cap */
 /* eslint-disable camelcase */
 /* eslint-disable no-console */
+
 let uuid;
 let pdf_uploaded = false;
+import('./pdf_api_wrapper');
 
 // eslint-disable-next-line no-undef, no-unused-vars
 const vueInstance = new Vue({
@@ -17,35 +20,6 @@ const vueInstance = new Vue({
     window.addEventListener('resize', () => this.scale_page_view());
   },
   methods: {
-    downloadURI(uri, name) {
-      const link = document.createElement('a');
-      link.download = name;
-      link.href = uri;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      // delete link;
-    },
-    download_pdf() {
-      console.debug('download_pdf triggered');
-      this.downloadURI(`/projects/${this.project_uuid}/complete.pdf`, 'complete_project.pdf');
-    },
-    download_split_pdf() {
-      fetch(`/get_single_pages_archive/${this.project_uuid}/`, {
-        method: 'GET',
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.debug('data from Backend: ', data);
-          if (data.status === 200) {
-            this.downloadURI(`/projects/${this.project_uuid}/pdf_splitted.zip`, 'splitted_pdfs.zip');
-            console.info('Archive with single Pages-PDFs created');
-          } else {
-            console.error('Project could not be created');
-          }
-        })
-        .catch((error) => console.error(error));
-    },
     move_page(from_page, to_page) {
       console.debug('trying to move page: ', from_page, to_page);
       fetch(`/move_page/${this.project_uuid}/${from_page}/${to_page}`, {
@@ -132,9 +106,8 @@ const vueInstance = new Vue({
       console.debug('div_overview', div_overview);
     },
     side_loaded() {
-      document.getElementById('btn_download_complete').addEventListener('click', () => this.download_pdf());
-      document.getElementById('btn_download_singel_pages').addEventListener('click', () => this.download_split_pdf());
-      const self = this;
+      document.getElementById('btn_download_complete').addEventListener('click', () => new pdf_api_wrapper(`${uuid}`).download_pdf());
+      document.getElementById('btn_download_singel_pages').addEventListener('click', () => new pdf_api_wrapper(`${uuid}`).download_split_pdf());
       this.scale_page_view();
 
       fetch('/init_project/', {
