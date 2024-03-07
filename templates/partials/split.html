@@ -1,0 +1,16 @@
+<div class="page_description_div" id="splitt_description_div">
+    <p class="page_description_p" id="splitt_description_p">
+        Upload a PDF that you want to be splitt into seperate pages.
+    </p>
+</div>
+
+{% include 'partials/dropzone.html' %}
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="{{ url_for('static', filename='js/pdf_api_wrapper.js') }}"></script>
+<script src="{{ url_for('static', filename='js/split.js') }}"></script>
+<link href="{{ url_for('static', filename='css/split.css') }}" rel="stylesheet">
+
+<div id="btn-group-download" class="btn-group" role="group" aria-label="Download outlined buttons">
+    <button type="button" class="btn btn-outline-dark" id="btn_download_singel_pages">Download Project as single Pages</button>    
+</div>

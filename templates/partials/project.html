@@ -1,0 +1,30 @@
+<div class="page_description_div" id="project_description_div">
+    <p class="page_description_p" id="project_description_p">
+        Here you can create a Project out of multiple PDFs, move pages around and download the adapted File.
+    </p>
+</div>
+
+{% include 'partials/dropzone.html' %}
+
+<div class="clearfix"></div>
+<div style="height: 2em;"></div>
+<div id="overview-wrapper">
+    <div id="page_overview">
+    <!-- Filled by dynamically loaded content -->
+    <!--
+        <div class="single_page_div">PDF_1</div>
+        <div class="single_page_div">PDF_2</div>
+        <div class="single_page_div">PDF_3</div>
+    -->
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="{{ url_for('static', filename='js/pdf_api_wrapper.js') }}"></script>
+<script src="{{ url_for('static', filename='js/project.js') }}"></script>
+<link href="{{ url_for('static', filename='css/project.css') }}" rel="stylesheet">
+
+<div id="btn-group-download" class="btn-group" role="group" aria-label="Download outlined buttons">
+    <button type="button" class="btn btn-outline-dark" id="btn_download_complete">Download whole Project</button>
+    <button type="button" class="btn btn-outline-dark" id="btn_download_singel_pages">Download Project as single Pages</button>    
+</div>

@@ -1,5 +1,7 @@
 import shutil
 import os
+import glob
+import traceback
 from flask import Flask, render_template, request, redirect, jsonify, send_from_directory
 from pdf_util.pdf_project_manager import pdf_project_manager
 
@@ -20,14 +22,33 @@ logging.basicConfig(
 )
 
 
-app = Flask(__name__)
-
+app = Flask(__name__, static_folder=os.path.abspath('/app/static'))
 app.config['UPLOAD_FOLDER'] = 'uploads'
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return redirect("/split", code=302)
+
+
+@app.route('/project')
+def project():
+    return render_template('base.html', page='project', settings='set', error=False)
+
+
+@app.route('/split')
+def splitt():
+    return render_template('base.html', page='split', settings='set', error=False)
+
+
+@app.route('/merge')
+def merge():
+    return render_template('base.html', page='merge', settings='set', error=False)
+
+
+@app.route('/ocr')
+def ocr():
+    return render_template('base.html', page='ocr', settings='set', error=False)
 
 
 @app.route('/split/<path:path>')
@@ -38,6 +59,64 @@ def send_report(path):
 @app.route('/merge/<path:path>')
 def send_merge(path):
     return send_from_directory('merge', path)
+
+
+@app.route('/projects/<path:path>')
+def get_project(path):
+    return send_from_directory('projects', path)
+
+
+@app.route('/get_single_pages_archive/<uuid>/')
+def get_single_pages_archive(uuid):
+    try:
+        shutil.make_archive('pdf_splitted', 'zip', "/app/projects/" + uuid + '/splitted')
+        os.rename('/app/pdf_splitted.zip', '/app/projects/' + uuid + '/pdf_splitted.zip')
+        response = jsonify({'status': 200, 'url': '/projects/' + uuid + '/pdf_splitted.zip'})
+    except Exception as e:
+        logging.debug("There was an error: " + str(e))
+        logging.debug("Stacktrace: " + str(traceback.format_exc()))
+        response = jsonify({"status": 500, "error_message": e})
+    return response
+
+
+@app.route('/get_single_pages_info/<uuid>/')
+def get_single_pages_info(uuid):
+    try:
+        pages = []
+
+        page_list = glob.glob("/app/projects/" + uuid + "/splitted/*.pdf")
+        logging.debug("page_list: ")
+        logging.debug(page_list)
+
+        page_list.sort()
+        logging.debug("sorted_page_list: ")
+        logging.debug(page_list)
+
+        for file in page_list:
+            pages.append(file[4:])  # Cut of /app
+        response = jsonify({'status': 200, 'pages': pages})
+    except Exception as e:
+        logging.debug("There was an error: " + str(e))
+        logging.debug("Stacktrace: " + str(traceback.format_exc()))
+        response = jsonify({"status": 500, "error_message": e})
+    return response
+
+
+@app.route('/move_page/<uuid>/<from_page>/<to_page>')
+def move_page(uuid, from_page, to_page):
+    try:
+        pdf_project = pdf_project_manager(uuid4=uuid)
+        logging.debug("int(from_page): ")
+        logging.debug(int(from_page))
+        logging.debug("int(to_page): ")
+        logging.debug(int(to_page))
+        pdf_project.move_page(from_location=int(from_page), to_location=int(to_page))
+        response = jsonify({'status': 200, 'message': 'page moved successfully'})
+    except Exception as e:
+        logging.debug("There was an error: " + str(e))
+        logging.debug("Stacktrace: " + str(traceback.format_exc()))
+        response = jsonify({"status": 500, "error_message": e})
+    return response
 
 
 @app.route('/split_to_zip', methods=['POST'])
@@ -104,6 +183,46 @@ def merge_to_pdf():
 
         response = jsonify({"url": '/merge/merger.pdf', "name": os.path.splitext(os.path.basename(out_path))[0]})
         return response
+
+
+@app.route('/init_project/', methods=['GET'])
+def init_project():
+    try:
+        pdf_project = pdf_project_manager()
+        response = jsonify({"status": 200, "project_uuid": pdf_project.uuid})
+    except Exception as e:
+        logging.debug("There was an error: " + str(e))
+        logging.debug("Stacktrace: " + str(traceback.format_exc()))
+        response = jsonify({"status": 500, "project_uuid": ''})
+    return response
+
+
+@app.route('/add_pdf_to_project/', methods=['POST'])
+def add_pdf_to_project():
+    try:
+        if 'pdf' not in request.files:
+            logging.debug(request)
+            return redirect(request.url)
+        else:
+            pdf_file = request.files['pdf']
+            filename_1 = os.path.join(os.path.dirname(os.path.realpath(__file__)), app.config['UPLOAD_FOLDER'], pdf_file.filename)
+            pdf_file.save(filename_1)
+
+        pdf_file = request.files['pdf']
+        uuid = request.form['uuid']
+        logging.debug(pdf_file)
+        logging.debug(uuid)
+
+        pdf_project = pdf_project_manager(uuid4=uuid)
+        pdf_project.add_pdf(filename_1)
+
+        response = jsonify({"status": 200, "message": 'PDF added'})
+    except Exception as e:
+        logging.debug("There was an error: " + str(e))
+        logging.debug("Stacktrace: " + str(traceback.format_exc()))
+        response = jsonify({"status": 500, "error_message": e})
+
+    return response
 
 
 if __name__ == '__main__':

@@ -1,0 +1,13 @@
+#pdf-dropzone {
+    min-height: 50px;
+    max-height: 150px;
+    height: 150px;
+    border: 0.1em solid darkgray;
+    border-radius: 1em;
+    padding-top:60px;
+    text-align: center;
+}
+#pdf-dropzone:hover {
+    cursor: pointer;
+    border: 0.2em solid darkslategray;
+}
