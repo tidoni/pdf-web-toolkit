@@ -4,7 +4,7 @@
 
 let uuid;
 let pdf_uploaded = false;
-import('./pdf_api_wrapper');
+import('./pdf_api_wrapper.js');
 
 // eslint-disable-next-line no-undef, no-unused-vars
 const vueInstance = new Vue({

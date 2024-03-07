@@ -28,12 +28,17 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 
 @app.route('/')
 def index():
+    return redirect("/split", code=302)
+
+
+@app.route('/project')
+def project():
     return render_template('base.html', page='project', settings='set', error=False)
 
 
-@app.route('/splitt')
+@app.route('/split')
 def splitt():
-    return render_template('base.html', page='splitt', settings='set', error=False)
+    return render_template('base.html', page='split', settings='set', error=False)
 
 
 @app.route('/merge')
@@ -44,11 +49,6 @@ def merge():
 @app.route('/ocr')
 def ocr():
     return render_template('base.html', page='ocr', settings='set', error=False)
-
-
-@app.route('/app/')
-def pdf_app():
-    return render_template('app.html')
 
 
 @app.route('/split/<path:path>')
