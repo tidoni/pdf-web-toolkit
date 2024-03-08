@@ -2,6 +2,11 @@
     clear: both;
 }
 
+.download-button-icons {
+    margin-left: 0.2em;
+}
+
+
 /* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {
     visibility: hidden; /* Hidden by default. Visible on click */
