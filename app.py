@@ -37,7 +37,7 @@ def project():
 
 
 @app.route('/split')
-def splitt():
+def split():
     return render_template('base.html', page='split', settings='set', error=False)
 
 

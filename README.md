@@ -1,6 +1,6 @@
 # PDF Web Toolkit
 
-A Web-Application allowing you to splitt and merge PDF-Files.
+A Web-Application allowing you to split and merge PDF-Files.
 
 ## Deploy
 
