@@ -67,5 +67,35 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Toasts -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+      <!-- Success uploading PDF -->
+      <div id="success-upload-toast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="{{ url_for('static', filename='img/check-square.svg') }}" class="rounded me-2" alt="Success">
+          <strong class="me-auto">Upload Success</strong>
+          <small></small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The File was successfully uploaded.
+        </div>
+      </div>
+      <!-- Warning uploading PDF -->
+      <div id="warn-upload-toast" class="toast text-bg-warning" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="{{ url_for('static', filename='img/x-square.svg') }}" class="rounded me-2" alt="Success">
+          <strong class="me-auto">Upload Failed</strong>
+          <small></small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          There was a problem uploading the file. Please reload the page and try again.
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+    </div>
   </body>
 </html>

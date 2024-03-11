@@ -151,6 +151,14 @@ const vueInstance = new Vue({
         pdf_uploaded = true;
         document.getElementById('btn-group-download').style.display = 'flex';
         this.display_pages();
+        // eslint-disable-next-line no-undef
+        bootstrap.Toast.getOrCreateInstance(document.getElementById('success-upload-toast')).show();
+      });
+
+      // eslint-disable-next-line no-unused-vars
+      dropzone.on('error', (file, xhr, formData) => {
+        // eslint-disable-next-line no-undef
+        bootstrap.Toast.getOrCreateInstance(document.getElementById('warn-upload-toast')).show();
       });
     },
   },
